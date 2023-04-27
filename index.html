@@ -147,8 +147,8 @@
             <input type="text" id="author" required minlength="4" maxlength="20">
             <label for="title">Title</label>
             <input type="text" id="title" required minlength="1" maxlength="20">
-            <label for="numOfPages">Number Of Pages</label>
-            <input type="number" id="numOfPages" required>
+            <label for="pages">Number Of Pages</label>
+            <input type="number" id="pages" required>
             <label for="isRead">Is Read?</label>
             <input type="checkbox" id="isRead">
             <button type="submit">Submit</button>
@@ -161,49 +161,52 @@
         formNode.addEventListener('submit',addBookToLibrary);
 
         let myLibrary = [
-            {
-                Author : 'Amish',
-                Title : 'Shiva 1',
-                Pages : 379,
-                IsRead : false
-            },
-            {
-                Author : 'J K Rowling',
-                Title : 'Harry potter',
-                Pages : 466,
-                IsRead : false
-            },{
-                Author : 'Arrundati Roy',
-                Title : 'Broken Republic',
-                Pages : 502,
-                IsRead : true
-            },
-            {
-                Author : 'Amish',
-                Title : 'Shiva 2',
-                Pages : 379,
-                IsRead : false
-            },
-            {
-                Author : 'J K Rowling',
-                Title : 'Harry potter 3',
-                Pages : 466,
-                IsRead : false
-            },{
-                Author : 'Arrundati Roy',
-                Title : 'GOST',
-                Pages : 502,
-                IsRead : true
-            },
-
+            new Book({
+                author : 'Amish',
+                title : 'Shiva 1',
+                pages : 379,
+                isRead : false
+            }),
+            new Book({
+                author : 'J K Rowling',
+                title : 'Harry potter',
+                pages : 466,
+                isRead : false
+            }),
+            new Book({
+                author : 'Arrundati Roy',
+                title : 'Broken Republic',
+                pages : 502,
+                isRead : true
+            }),
+            new Book({
+                author : 'Amish',
+                title : 'Shiva 2',
+                pages : 379,
+                isRead : false
+            }),
+            new Book({
+                author : 'J K Rowling',
+                title : 'Harry potter 3',
+                pages : 466,
+                isRead : false
+            }),
+            new Book({
+                author : 'Arrundati Roy',
+                title : 'GOST',
+                pages : 502,
+                isRead : true
+            })
         ];
-        function Book({author,title,numOfPages,isRead}){
-            let obj = {}
-            obj.Author = author;
-            obj.Title = title
-            obj.Pages = numOfPages;
-            obj.IsRead = isRead;
-            return obj;
+        function Book({author,title,pages,isRead}){
+            this.author = author;
+            this.title = title
+            this.pages = pages;
+            this.isRead = isRead;
+        }
+
+        Book.prototype.changeReadStatus = function(checked){
+            this.isRead= checked
         }
 
         function addBookToLibrary(event){
@@ -218,7 +221,7 @@
                 }
                 
             })
-            const book = Book(bookDetails);
+            const book = new Book(bookDetails);
             myLibrary.push(book);
             const newBookNode = createBookNode(book)
             booksContainerNode.append(newBookNode);
@@ -239,7 +242,7 @@
                 bookNode.setAttribute('class','book-card')
                 bookNode.setAttribute('data-book-identifier', uuid);
                 for(let [key,value] of Object.entries(book)){
-                    if(key==='IsRead'){
+                    if(key==='isRead'){
                         const wrapper = document.createElement('div');
                         wrapper.classList.add('checkbox-wrapper');
                         const keyDiv = document.createElement('input');
@@ -250,6 +253,7 @@
                         valueDiv.classList.add('property-value');
                         keyDiv.addEventListener('change', function(){
                             valueDiv.textContent = this.checked ? 'Read' : 'Not Read';
+                            book.changeReadStatus(this.checked);
                         })
                         wrapper.append(keyDiv);
                         wrapper.append(valueDiv);
