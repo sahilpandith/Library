@@ -199,6 +199,7 @@
             })
         ];
         function Book({author,title,pages,isRead}){
+            this.id = self.crypto.randomUUID();
             this.author = author;
             this.title = title
             this.pages = pages;
@@ -238,10 +239,12 @@
         }
         function createBookNode(book){
             const bookNode = document.createElement('div');
-            const uuid = self.crypto.randomUUID()
                 bookNode.setAttribute('class','book-card')
-                bookNode.setAttribute('data-book-identifier', uuid);
+                bookNode.setAttribute('data-book-identifier', book.id);
                 for(let [key,value] of Object.entries(book)){
+                    if(key==='id'){
+                        continue;
+                    }
                     if(key==='isRead'){
                         const wrapper = document.createElement('div');
                         wrapper.classList.add('checkbox-wrapper');
@@ -260,7 +263,7 @@
                         bookNode.append(wrapper);
                     }else{
                         const keyDiv = document.createElement('div');
-                        keyDiv.textContent = `${key}`;
+                        keyDiv.textContent = key.at(0).toLocaleUpperCase()+ key.slice(1);
                         keyDiv.classList.add('property-name');
                         bookNode.append(keyDiv);
                         const valueDiv = document.createElement('div');
@@ -272,7 +275,7 @@
                 }
                 const removeBookButton = document.createElement('button');
                 removeBookButton.setAttribute('id', 'remove-book-btn');
-                removeBookButton.setAttribute('data-identifier', uuid);
+                removeBookButton.setAttribute('data-identifier', book.id);
                 removeBookButton.textContent = 'Remove Book';
                 removeBookButton.addEventListener('click',removeBook);
                 bookNode.append(removeBookButton);
