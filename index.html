@@ -160,6 +160,20 @@
         const formNode = document.querySelector('.modal form');
         formNode.addEventListener('submit',addBookToLibrary);
 
+        class Book {
+            constructor({author,title,pages,isRead}){
+                this.id = self.crypto.randomUUID();
+                this.author = author;
+                this.title = title
+                this.pages = pages;
+                this.isRead = isRead;
+            }
+            changeReadStatus (checked){
+                    this.isRead= checked
+            }       
+
+        }
+        
         let myLibrary = [
             new Book({
                 author : 'Amish',
@@ -198,18 +212,20 @@
                 isRead : true
             })
         ];
-        function Book({author,title,pages,isRead}){
-            this.id = self.crypto.randomUUID();
-            this.author = author;
-            this.title = title
-            this.pages = pages;
-            this.isRead = isRead;
-        }
+        // function Book({author,title,pages,isRead}){
+        //     this.id = self.crypto.randomUUID();
+        //     this.author = author;
+        //     this.title = title
+        //     this.pages = pages;
+        //     this.isRead = isRead;
+        // }
+        // Book.prototype.changeReadStatus = function(checked){
+        //     this.isRead= checked
+        // }
 
-        Book.prototype.changeReadStatus = function(checked){
-            this.isRead= checked
-        }
+        
 
+        
         function addBookToLibrary(event){
             event.preventDefault();
             const bookDetails ={}
